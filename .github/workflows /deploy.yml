@@ -1,7 +1,6 @@
-name: Deploy to GitHub Pages
+name: "Deploy to GitHub Pages"
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
 
@@ -29,8 +28,8 @@ jobs:
       - name: "Install Dependencies"
         run: npm ci
       - name: "Build Website"
-        run: npm run build
-      - name: "Upload artifact"
+        run: npx --no-install next build
+      - name: "Upload build artifact"
         uses: actions/upload-pages-artifact@v3
         with:
           # Ensure this matches your build output directory
