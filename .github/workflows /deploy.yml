@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: "20"
       - name: "Build Website"
-        run: npm ci && npm run build
+        run: npm ci && npx next build
       - name: "Upload artifact"
         uses: actions/upload-pages-artifact@v3
         with:
