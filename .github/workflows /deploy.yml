@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Allow only one concurrent deployment
+# We will only progress with the latest build
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Build job
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
+      - name: "Setup Node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: "Build Website"
+        run: npm ci && npm run build
+      - name: "Upload artifact"
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    # Allow the GITHUB_TOKEN to deploy to GitHub Pages
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    name: "Deploy"
+    steps:
+      - name: "Deploy to GitHub Pages"
+        id: deployment
+        uses: actions/deploy-pages@v4
