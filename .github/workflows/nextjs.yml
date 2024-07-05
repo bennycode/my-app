@@ -7,28 +7,31 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Allow only one concurrent deployment
-# We will only progress with the latest build
+# Allow only one concurrent deployment,
+# we will only progress with the latest build
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 jobs:
-  # Build job
   build:
     name: "Build"
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@v4
+
       - name: "Setup Node"
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
       - name: "Install Dependencies"
         run: npm ci
+
       - name: "Build Website"
         run: npx --no-install next build
+
       - name: "Upload build artifact"
         uses: actions/upload-pages-artifact@v3
         with:
